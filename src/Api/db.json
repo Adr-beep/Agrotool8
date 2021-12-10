@@ -1,0 +1,108 @@
+{
+    "usuarios":[
+        {
+            "nombre": "Andres Camilo Alfaro",
+            "funcion": "Administrador",
+            "usuario": "AndresC",
+            "correo": "andres@gmail.com",
+            "fecha_ingreso": "12/12/2021",
+            "identificacion": 1057845678,
+            "password":"827ccb0eea8a706c4c34a16891f84e7b"
+        },
+
+        {
+            "nombre": "Andrea Jimenez Lopez",
+            "funcion": "Usuario",
+            "usuario": "AndreaC",
+            "correo": "andrea@gmail.com",
+            "fecha_ingreso": "11/12/2021",
+            "identificacion": 1057845679,
+            "password":"01cfcd4f6b8770febfb40cb906715822"
+        },
+
+        {
+            "nombre": "Diego Andres Albarracin",
+            "funcion": "Usuario",
+            "usuario": "DiegoC",
+            "correo": "diego@gmail.com",
+            "fecha_ingreso": "11/12/2021",
+            "identificacion": 1057845680,
+            "password":"01cfcd4f6b8770febfb40cb906715822"
+        },
+
+        {
+            "nombre": "Juan Diego Jimenez",
+            "funcion": "Administrador",
+            "usuario": "JuanC",
+            "correo": "juan@gmail.com",
+            "fecha_ingreso": "09/12/2021",
+            "identificacion": 1057845745,
+            "password":"01cfcd4f6b8770febfb40cb906715822"
+        }
+    ],
+
+    "predios":[
+
+        {
+            "predio":1,
+            "nombre":"las palmeras",
+            "encargado":"Diego Andres Albarracin",
+            "area": "85 m",
+            "ubicacion": "38E 21N",
+            "identificacion": 500023456
+                                    
+        },
+
+        {
+            "predio":2,
+            "nombre":"las acacias",
+            "encargado":"Diego Andres Albarracin",
+            "area": "90 m",
+            "ubicacion": "38E 21N",
+            "identificacion": 504567456
+                                    
+        },
+
+        {
+            "predio":1,
+            "nombre":"las aguas",
+            "encargado":"Diego Andres Albarracin",
+            "area": "45 m",
+            "ubicacion": "50E 21N",
+            "identificacion": 5567823456
+                                    
+        }
+    ],
+
+    "cultivos":[
+        {
+            "cultivo":1,
+            "tipo":"zanahorias",
+            "tiempo":"18 semanas",
+            "recoleccion": "4dias",
+            "prox_siembra": "38 dias",
+            "producto": "85 kg"
+                                    
+        },
+
+        {
+            "cultivo":2,
+            "tipo":"aguacate",
+            "tiempo":"15 semanas",
+            "recoleccion": "10 dias",
+            "prox_siembra": "30 dias",
+            "producto": "150 kg"
+                                    
+        },
+
+        {
+            "cultivo":2,
+            "tipo":"maiz",
+            "tiempo":"20 semanas",
+            "recoleccion": "20 dias",
+            "prox_siembra": "30 dias",
+            "producto": "200 kg"
+                                    
+        }
+    ]
+}

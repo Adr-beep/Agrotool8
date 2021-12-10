@@ -1,0 +1,148 @@
+body {
+    background-color: var(--content-background-color);
+}
+
+.form-section {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-container {
+    background-color: var(--dashboard-background-color);
+    height: 55%;
+    width: 25%;
+    border: var(--panels-border);
+    border-radius: var(--panels-border-radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-content {
+    height: 90%;
+    width: 80%;
+    display: grid;
+    grid-template-rows: 20% 1fr;
+    row-gap: 5%;
+}
+
+.form-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-logo img {
+    width: 50%;
+}
+
+.form-login {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-item {
+    width: 100%;
+    margin-bottom: 5%;
+    height: 12%;
+    height: 15%;
+    position: relative;
+    border: var(--panels-border);
+    border-radius: var(--panels-border-radius);
+}
+
+input {
+    padding: 0 2%;
+}
+
+input,
+button {
+    height: 100%;
+    width: 100%;
+    outline: none;
+}
+
+.login-item label {
+    background-color: white;
+    position: absolute;
+    top: 30%;
+    left: 2%;
+    font-weight: var(--header-search-font-weight);
+    color: var(--header-search-font-color);
+    pointer-events: none;
+    transition: var(--transition-focus-1);
+}
+
+.i-login {
+    border: none;
+    display: flex;
+    justify-content: space-between;
+}
+
+button {
+    cursor: pointer;
+    transition: var(--transition-hover-1);
+}
+
+.button-2 {
+    width: 35%;
+}
+
+.button-1 {
+    background-color: var(--header-button-background-color);
+    font-weight: var(--button-text-weight);
+    color: var(--header-button-font-color);
+}
+
+.login-text {
+    margin-top: 4%;
+    display: flex;
+    flex-direction: column;
+}
+
+.text-policy {
+    width: 100%;
+}
+
+.text-policy {
+    text-align: center;
+    font-size: calc(var(--font-size)*0.80);
+    color: #000000;
+    line-height: calc(var(--font-size)*1.1);
+}
+
+
+/* Hover and Focus Effects */
+
+input:hover {
+    box-shadow: var(--input-text-box-shadow);
+}
+
+button:hover {
+    background-color: var(--sidepanel-active-background-color);
+    box-shadow: var(--button-box-shadow);
+}
+
+input:focus~label,
+input:valid~label {
+    padding: 0 1% 0 1%;
+    top: -15%;
+    left: 0;
+    z-index: 2;
+    color: #000000;
+    font-size: calc(var(--font-size)*0.8);
+}
+
+input:focus,
+input:valid {
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    border-bottom: 2px solid #000000;
+    transition-duration: 0s;
+}
