@@ -27,12 +27,13 @@ class Panelcultivos extends Component{
 
     state={
         data:[],
+        modalEliminar: false,
         modalInsertar: false,
         form:{
-            nombre: '',
-            funcion: '',
-            correo: '',
-            contraseña: ''
+            tipo: '',
+            tiempo: '',
+            recoleccion: '',
+            producto: ''
         }
     }
 
@@ -57,6 +58,20 @@ class Panelcultivos extends Component{
             })
     }
 
+    peticionPut=()=>{
+        axios.put(url+this.state.form.cultivo, this.state.form).then(response=>{
+          this.modalInsertar();
+          this.peticionGet();
+        })
+      }
+
+    peticionDelete=()=>{
+        axios.delete(url+this.state.form.cultivo).then(response=>{
+          this.setState({modalEliminar: false});
+          this.peticionGet();
+        })
+      }
+
     modalInsertar=()=>{
         this.setState({modalInsertar:!this.state.modalInsertar})
 
@@ -64,30 +79,19 @@ class Panelcultivos extends Component{
 
 
 
-    seleccionarUsuario=(usuario)=>{
+    seleccionarcultivo=(cultivo)=>{
         this.setState({
+            tipoModal:'actualizar',
             form:{
-                nombre: usuario.nombre,
-                funcion: usuario.funcion,
-                identificacion: usuario.identificacion,
-                correo: usuario.correo
+                tipo: cultivo.tipo,
+                tiempo: cultivo.tiempo,
+                recoleccion: cultivo.recoleccion,
+                producto: cultivo.producto
 
             }
         })
     }
 
-    peticionDelete=()=>{
-        axios.delete(url+this.state.form.usuario).then(response=>{
-            
-            this.peticionGet()
-            
-        })
-    }
-
-        componentDidMount() {
-            this.peticionGet();
-
-        }
 
     handleChange= async e=>{
         e.persist();
@@ -98,6 +102,11 @@ class Panelcultivos extends Component{
             }
         });
     console.log(this.state.form);
+
+    }
+
+    componentDidMount() {
+        this.peticionGet();
 
     }
 
@@ -131,7 +140,7 @@ class Panelcultivos extends Component{
                             <input type="text" placeholder="Buscar " id="search" className="search-text" />
                         </div>
 
-                        <button onClick={() => this.modalInsertar()} className="header-right-button">
+                        <button onClick={()=>{this.setState({form: null, tipoModal: 'insertar'}); this.modalInsertar()}} className="header-right-button">
                             <svg  xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="var(--header-button-font-color)" className="button-logo"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M18 13h-5v5c0 .55-.45 1-1 1s-1-.45-1-1v-5H6c-.55 0-1-.45-1-1s.45-1 1-1h5V6c0-.55.45-1 1-1s1 .45 1 1v5h5c.55 0 1 .45 1 1s-.45 1-1 1z" /></svg>
                             <h2 classNameName="button-text">Añadir Cultivos</h2>
                         </button>
@@ -195,12 +204,13 @@ class Panelcultivos extends Component{
                                     <td>{cultivo.recoleccion}</td>
                                     <td>{cultivo.prox_siembra}</td>
                                     <td>{cultivo.producto}</td>
-                                    <td><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                                    <td><svg onClick={()=>{this.seleccionarcultivo(cultivo); this.setState({modalEliminar: true})}}xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
                                         <rect x="0.559937" y="0.75" width="34.5" height="34.5" rx="3.5" fill="#F2F1F6" stroke="#DDDCDF" />
                                         <path d="M11.8099 25C11.8099 26.1 12.7099 27 13.8099 27H21.8099C22.9099 27 23.8099 26.1 23.8099 25V13H11.8099V25ZM24.8099 10H21.3099L20.3099 9H15.3099L14.3099 10H10.8099V12H24.8099V10Z" fill="#4D4D4D" />
                                     </svg>
+                                    {"   "}
 
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="37" height="36" viewBox="0 0 37 36" fill="none">
+                                        <svg onClick={()=>{this.seleccionarcultivo(cultivo); this.modalInsertar()}} xmlns="http://www.w3.org/2000/svg" width="37" height="36" viewBox="0 0 37 36" fill="none">
                                             <rect x="1.05994" y="0.75" width="34.5" height="34.5" rx="3.5" fill="#F2F1F6" stroke="#DDDCDF" />
                                             <path d="M9.30994 23.2501V27.0001H13.0599L24.1199 15.9401L20.3699 12.1901L9.30994 23.2501ZM27.0199 13.0401C27.4099 12.6501 27.4099 12.0201 27.0199 11.6301L24.6799 9.29006C24.2899 8.90006 23.6599 8.90006 23.2699 9.29006L21.4399 11.1201L25.1899 14.8701L27.0199 13.0401Z" fill="#4D4D4D" />
                                         </svg>
@@ -222,38 +232,59 @@ class Panelcultivos extends Component{
                 <form action="" method="" id="frm-test" autocomplete="off" enctype="multipart/form-data">
                     <div className="frow frow-1">
                         <div className="fitem fitem1-6">
-                            <input type="text" name="nombre" id="nombre" onChange={this.handleChange} value={form.nombre} required />
-                            <label for="nombre">Nombre </label>
+                            <input type="text" name="tipo" id="tipo" onChange={this.handleChange} value={form?form.tipo: ''} required />
+                            <label for="tipo">Tipo</label>
                         </div>
                         <div className="fitem fitem1-2">
-                            <input type="text" id="funcion" name="funcion" onChange={this.handleChange} value={form.funcion} required />
-                            <label for="funcion">Funcion</label>
+                            <input type="text" id="tiempo" name="tiempo" onChange={this.handleChange} value={form?form.tiempo: ''} required />
+                            <label for="tiempo">tiempo</label>
                         </div>
                         <div className="fitem fitem1-3">
-                            <input type="email" id="correo" name="correo" onChange={this.handleChange} value={form.correo} required />
-                            <label for="correo">Correo</label>
+                            <input type="text" id="recoleccion" name="recoleccion" onChange={this.handleChange} value={form?form.recoleccion: ''} required />
+                            <label for="recoleccion">Recoleccion</label>
                         </div>
 
                     </div>
                     <div className="frow frow-1">
                         <div className="fitem fitem1-1">
-                            <input type="password" id="password" name="password" onChange={this.handleChange} value={form.password} required />
-                            <label for="password">Contraseña</label>
+                            <input type="text" id="producto" name="producto" onChange={this.handleChange} value={form?form.producto: ''} required />
+                            <label for="producto">Producto</label>
                         </div>
 
 
                     </div>
-
                     <div classNameName="frow frow-4">
+
                         <div classNameName="fdiv fdiv-2">
-                            <button type="submit" onClick={() => this.peticionPost()} classNameName="">Guardar</button>
-                            <a onClick={() => this.modalInsertar()} href="" classNameName="btn btn-green">
+                        {this.state.tipoModal=='insertar'?
+                            <button onClick={() => this.peticionPost()} classNameName="">Guardar</button>:
+                            <button  onClick={()=>this.peticionPut()}>
+                            Actualizar
+                          </button>
+                        
+                        }
+                        <a onClick={() => this.modalInsertar()} href="" classNameName="">
                                 <h2>Cancelar</h2>
-                            </a>
+                        </a>
                         </div>
                     </div>
-                </form>
+                </form>  
 
+            </Modal>
+
+            <Modal isOpen={this.state.modalEliminar}>
+                
+                    Estás seguro que deseas eliminar el cultivo {form && form.tipo}
+                    <div classNameName="frow frow-4">
+
+                        <div classNameName="fdiv fdiv-2">
+
+                        <button class="dbutton dbutton-2" onClick={() => this.peticionDelete()}>Sí</button>
+                        <button  class="dbutton dbutton-2" onClick={() => this.setState({ modalEliminar: false })}>No </button>
+
+                        </div>
+                    </div>  
+                
             </Modal></></>
 
     );

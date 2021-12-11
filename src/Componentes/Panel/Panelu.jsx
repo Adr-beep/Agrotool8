@@ -28,6 +28,7 @@ class Panelprincipal extends Component{
 
     state={
         data:[],
+        modalEliminar: false,
         modalInsertar: false,
         form:{
             nombre: '',
@@ -39,34 +40,46 @@ class Panelprincipal extends Component{
 
     
     peticionGet=()=>{
-        axios.get(url).then(response=>{
-            console.log(response.data);
-            this.setState({data:response.data});
-        }).catch(error=>{
-            console.log(error.message);        
-            })    
+    axios.get(url).then(response=>{
+        console.log(response.data);
+        this.setState({data:response.data});
+    }).catch(error=>{
+        console.log(error.message);        
+    })    
         
     }
 
     peticionPost=async()=>{
         await axios.post(url,this.state.form).then(response=>{
             this.modalInsertar();
-            this.peticionGet();
-           
+            this.peticionGet();    
         }).catch(error=>{
             console.log(error.message);        
             })
     }
+
+    peticionPut=()=>{
+        axios.put(url+this.state.form.usuario, this.state.form).then(response=>{
+          this.modalInsertar();
+          this.peticionGet();
+        })
+      }
+
+    peticionDelete=()=>{
+        axios.delete(url+this.state.form.usuario).then(response=>{
+          this.setState({modalEliminar: false});
+          this.peticionGet();
+        })
+      }
 
     modalInsertar=()=>{
         this.setState({modalInsertar:!this.state.modalInsertar})
 
     }
 
-
-
     seleccionarUsuario=(usuario)=>{
         this.setState({
+            tipoModal:'actualizar',
             form:{
                 nombre: usuario.nombre,
                 funcion: usuario.funcion,
@@ -77,18 +90,9 @@ class Panelprincipal extends Component{
         })
     }
 
-    peticionDelete=()=>{
-        axios.delete(url+this.state.form.usuario).then(response=>{
-            
-            this.peticionGet()
-            
-        })
-    }
+    
 
-        componentDidMount() {
-            this.peticionGet();
-
-        }
+    
 
     handleChange= async e=>{
         e.persist();
@@ -102,6 +106,11 @@ class Panelprincipal extends Component{
 
     }
 
+    componentDidMount() {
+        this.peticionGet();
+
+    }
+
     render(){
         const{form}=this.state;
         console.log('nombre:' + cookies.get('nombre'));
@@ -111,7 +120,7 @@ class Panelprincipal extends Component{
 
     return (
         
-        <><><body>
+        <><body>
             <div className="wrapper">
                 <div className="section">
                     <div className="top_navbar">
@@ -132,8 +141,8 @@ class Panelprincipal extends Component{
                             <input type="text" placeholder="Buscar " id="search" className="search-text" />
                         </div>
 
-                        <button onClick={() => this.modalInsertar()} className="header-right-button">
-                            <svg  xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="var(--header-button-font-color)" className="button-logo"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M18 13h-5v5c0 .55-.45 1-1 1s-1-.45-1-1v-5H6c-.55 0-1-.45-1-1s.45-1 1-1h5V6c0-.55.45-1 1-1s1 .45 1 1v5h5c.55 0 1 .45 1 1s-.45 1-1 1z" /></svg>
+                        <button onClick={()=>{this.setState({form: null, tipoModal: 'insertar'}); this.modalInsertar()}} className="header-right-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="var(--header-button-font-color)" className="button-logo"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M18 13h-5v5c0 .55-.45 1-1 1s-1-.45-1-1v-5H6c-.55 0-1-.45-1-1s.45-1 1-1h5V6c0-.55.45-1 1-1s1 .45 1 1v5h5c.55 0 1 .45 1 1s-.45 1-1 1z" /></svg>
                             <h2 classNameName="button-text">Añadir usuario</h2>
                         </button>
                     </div>
@@ -142,38 +151,38 @@ class Panelprincipal extends Component{
                     <div className="sidebar">
 
                         <div className="profile">
-                            <img src={logo}  alt="profile_picture"/>
+                            <img src={logo} alt="profile_picture" />
 
                         </div>
 
                         <ul>
                             <li>
                                 <a href="/Panelusuarios" className="active">
-                                    <img src={usuarios} alt=""/>
+                                    <img src={usuarios} alt="" />
                                     <span className="item">Usuario</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/Panelpredios">
-                                    <img src={predios} alt=""/>
+                                    <img src={predios} alt="" />
                                     <span className="item">Predios</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="Panelcultivos">
-                                    <img src={cultivos} alt=""/>
+                                    <img src={cultivos} alt="" />
                                     <span className="item">Cultivos</span>
                                 </a>
                             </li>
 
                         </ul>
                         <div class="container-icon">
-                                        <button onClick={() => this.cerrarSesion()}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" class="icon-svg"><g><path d="M0,0h24v24H0V0z" fill="none" /></g><g><path d="M17,8l-1.41,1.41L17.17,11H9v2h8.17l-1.58,1.58L17,16l4-4L17,8z M5,5h7V3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h7v-2H5V5z" /></g></svg>
-                                        </button>
-                                    </div>
+                            <button onClick={() => this.cerrarSesion()}>
+                                <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" class="icon-svg"><g><path d="M0,0h24v24H0V0z" fill="none" /></g><g><path d="M17,8l-1.41,1.41L17.17,11H9v2h8.17l-1.58,1.58L17,16l4-4L17,8z M5,5h7V3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h7v-2H5V5z" /></g></svg>
+                            </button>
+                        </div>
                     </div>
-                    
+
 
                     <div className="table-responsive">
                         <table className="responsive-table  table-bordered ">
@@ -188,57 +197,56 @@ class Panelprincipal extends Component{
                                 </tr>
                             </thead>
                             <tbody>
-                            {this.state.data.map(usuario =>{
-                                   return(
-                                <tr>
-                                    <th scope="row">#</th>
-                                    <td>{usuario.nombre}</td>
-                                    <td>{usuario.funcion}</td>
-                                    <td>{usuario.fecha_ingreso}</td>
-                                    <td>{usuario.identificacion}</td>
-                                    <td><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
-                                        <rect x="0.559937" y="0.75" width="34.5" height="34.5" rx="3.5" fill="#F2F1F6" stroke="#DDDCDF" />
-                                        <path d="M11.8099 25C11.8099 26.1 12.7099 27 13.8099 27H21.8099C22.9099 27 23.8099 26.1 23.8099 25V13H11.8099V25ZM24.8099 10H21.3099L20.3099 9H15.3099L14.3099 10H10.8099V12H24.8099V10Z" fill="#4D4D4D" />
-                                    </svg>
+                                {this.state.data.map(usuario => {
+                                    return (
+                                        <tr>
+                                            <th scope="row">#</th>
+                                            <td>{usuario.nombre}</td>
+                                            <td>{usuario.funcion}</td>
+                                            <td>{usuario.fecha_ingreso}</td>
+                                            <td>{usuario.identificacion}</td>
+                                            <td><svg onClick={()=>{this.seleccionarUsuario(usuario); this.setState({modalEliminar: true})}} xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                                                <rect x="0.559937" y="0.75" width="34.5" height="34.5" rx="3.5" fill="#F2F1F6" stroke="#DDDCDF" />
+                                                <path d="M11.8099 25C11.8099 26.1 12.7099 27 13.8099 27H21.8099C22.9099 27 23.8099 26.1 23.8099 25V13H11.8099V25ZM24.8099 10H21.3099L20.3099 9H15.3099L14.3099 10H10.8099V12H24.8099V10Z" fill="#4D4D4D" />
+                                            </svg>
+                                            {"   "}
 
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="37" height="36" viewBox="0 0 37 36" fill="none">
-                                            <rect x="1.05994" y="0.75" width="34.5" height="34.5" rx="3.5" fill="#F2F1F6" stroke="#DDDCDF" />
-                                            <path d="M9.30994 23.2501V27.0001H13.0599L24.1199 15.9401L20.3699 12.1901L9.30994 23.2501ZM27.0199 13.0401C27.4099 12.6501 27.4099 12.0201 27.0199 11.6301L24.6799 9.29006C24.2899 8.90006 23.6599 8.90006 23.2699 9.29006L21.4399 11.1201L25.1899 14.8701L27.0199 13.0401Z" fill="#4D4D4D" />
-                                        </svg>
-                                    </td>
-                                </tr>
-                                )
-                            })
-                            }
+                                                <svg onClick={()=>{this.seleccionarUsuario(usuario); this.modalInsertar()}} xmlns="http://www.w3.org/2000/svg" width="37" height="36" viewBox="0 0 37 36" fill="none">
+                                                    <rect x="1.05994" y="0.75" width="34.5" height="34.5" rx="3.5" fill="#F2F1F6" stroke="#DDDCDF" />
+                                                    <path d="M9.30994 23.2501V27.0001H13.0599L24.1199 15.9401L20.3699 12.1901L9.30994 23.2501ZM27.0199 13.0401C27.4099 12.6501 27.4099 12.0201 27.0199 11.6301L24.6799 9.29006C24.2899 8.90006 23.6599 8.90006 23.2699 9.29006L21.4399 11.1201L25.1899 14.8701L27.0199 13.0401Z" fill="#4D4D4D" />
+                                                </svg>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
 
                             </tbody>
                         </table>
                     </div>
                 </div>
-        </div>
-        
-        </body>
+            </div>
 
-        <Modal is isOpen={this.state.modalInsertar}>
-                <form action="" method="" id="frm-test" autocomplete="off" enctype="multipart/form-data">
+        </body><Modal isOpen={this.state.modalInsertar}>
+                <form action="" method="" id="frm-test" autocomplete="off" enctype="multipart/form-data" onChange={this.handleChange} value={form?form.id: this.state.data.length+1}>
                     <div className="frow frow-1">
                         <div className="fitem fitem1-6">
-                            <input type="text" name="nombre" id="nombre" onChange={this.handleChange} value={form.nombre} required />
+                            <input type="text" name="nombre" id="nombre" onChange={this.handleChange} value={form?form.nombre: ''} required />
                             <label for="nombre">Nombre </label>
                         </div>
                         <div className="fitem fitem1-2">
-                            <input type="text" id="funcion" name="funcion" onChange={this.handleChange} value={form.funcion} required />
+                            <input type="text" id="funcion" name="funcion" onChange={this.handleChange} value={form?form.funcion: ''} required />
                             <label for="funcion">Funcion</label>
                         </div>
                         <div className="fitem fitem1-3">
-                            <input type="email" id="correo" name="correo" onChange={this.handleChange} value={form.correo} required />
+                            <input type="email" id="correo" name="correo" onChange={this.handleChange} value={form?form.correo: ''} required />
                             <label for="correo">Correo</label>
                         </div>
 
                     </div>
+                    
                     <div className="frow frow-1">
                         <div className="fitem fitem1-1">
-                            <input type="password" id="password" name="password" onChange={this.handleChange} value={form.password} required />
+                            <input type="password" id="password" name="password" onChange={this.handleChange} value={form?form.password: ''} required />
                             <label for="password">Contraseña</label>
                         </div>
 
@@ -246,16 +254,38 @@ class Panelprincipal extends Component{
                     </div>
 
                     <div classNameName="frow frow-4">
+
                         <div classNameName="fdiv fdiv-2">
-                            <button type="submit" onClick={() => this.peticionPost()} classNameName="">Guardar</button>
-                            <a onClick={() => this.modalInsertar()} href="" classNameName="btn btn-green">
+                        {this.state.tipoModal=='insertar'?
+                            <button onClick={() => this.peticionPost()} classNameName="">Guardar</button>:
+                            <button  onClick={()=>this.peticionPut()}>
+                            Actualizar
+                          </button>
+                        
+                        }
+                        <a onClick={() => this.modalInsertar()} href="" classNameName="">
                                 <h2>Cancelar</h2>
-                            </a>
+                        </a>
                         </div>
                     </div>
                 </form>
 
-            </Modal></></>
+            </Modal>
+
+            <Modal isOpen={this.state.modalEliminar}>
+                
+                    Estás seguro que deseas eliminar el usuario {form && form.nombre}
+                    <div classNameName="frow frow-4">
+
+                        <div classNameName="fdiv fdiv-2">
+
+                        <button class="dbutton dbutton-2" onClick={() => this.peticionDelete()}>Sí</button>
+                        <button  class="dbutton dbutton-2" onClick={() => this.setState({ modalEliminar: false })}>No </button>
+
+                        </div>
+                    </div>  
+                
+            </Modal></>
 
     );
 
@@ -263,3 +293,4 @@ class Panelprincipal extends Component{
 
 }
 export default Panelprincipal;
+
